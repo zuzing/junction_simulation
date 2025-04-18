@@ -1,7 +1,13 @@
+package junction
+
+import datatypes.CardinalDirection
+import datatypes.RelativeDirection
+import datatypes.SignalType
+
 class Lane(
     val id: String,
     val entryDirection: CardinalDirection,
-    val permittedDirections: List<RelativeDirection>
+    val permittedDirections: List<RelativeDirection>,
     val signalType: SignalType)
 {
     private val vehicles: MutableList<Vehicle> = mutableListOf()

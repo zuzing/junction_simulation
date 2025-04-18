@@ -1,3 +1,3 @@
-interface Instruction(){
+interface Instruction{
     fun run()
 }

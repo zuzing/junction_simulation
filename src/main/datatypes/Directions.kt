@@ -1,12 +1,14 @@
+package datatypes
+
 enum class CardinalDirection {
     NORTH,
     EAST,
     SOUTH,
     WEST; // order is important here, impacts the RelativeDirection class
     companion object {
-        fun fromString(direction: String): Direction? {
+        fun fromString(direction: String): CardinalDirection {
 //            return values().find { it.name.equals(direction, ignoreCase = true) }
-            return enumValueOfOrNull<Direction>(direction.uppercase()) // not sure if this works
+            return enumValueOf<CardinalDirection>(direction.uppercase()) // not sure if this works
         }
     }
 }
@@ -21,7 +23,7 @@ enum class RelativeDirection {
         fun fromCardinalDirection(startDirection: CardinalDirection, endDirection: CardinalDirection): RelativeDirection {
             val startOrdinal = startDirection.ordinal
             val endOrdinal = endDirection.ordinal
-            val numDirections = Direction.values().size
+            val numDirections = CardinalDirection.entries.size
             val diff = (endOrdinal - startOrdinal + numDirections) % numDirections
 
             return when (diff) {

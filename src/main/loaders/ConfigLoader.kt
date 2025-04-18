@@ -1,17 +1,27 @@
+package loaders
+
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import java.io.File
 import java.io.IOException
 
+import datatypes.CardinalDirection
+import datatypes.RelativeDirection
+import datatypes.SignalType
+import junction.Lane
+
+
+
+
 data class LaneConfig(
-    val LaneId: String,
+    val laneId: String,
     val entryDirection: CardinalDirection,
-    val permittedDirections: List<RelativeDirection>
+    val permittedDirections: List<RelativeDirection>,
     val signalType: SignalType)
-){
-    fun toLane(id: String): Lane {
+{
+    fun toLane(): Lane {
         return Lane(
-            id = LaneId,
+            id = laneId,
             entryDirection = entryDirection,
             permittedDirections = permittedDirections,
             signalType = signalType
@@ -22,7 +32,7 @@ data class LaneConfig(
 data class SimulationConfig(
     val numVehiclesPerGreen: Int,
     val yellowLightDuration: Int,
-    val Lanes: List<LaneConfig>
+    val lanes: List<LaneConfig>
 )
 
 object ConfigLoader {
@@ -33,7 +43,7 @@ object ConfigLoader {
         try {
             return mapper.readValue(file, SimulationConfig::class.java)
         } catch (e: IOException) {
-            throw e("Error loading configuration from $filePath: ${e.message}")
+            throw IOException("Error loading configuration from $filePath: ${e.message}")
         }
     }
 }

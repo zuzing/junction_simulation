@@ -1,3 +1,5 @@
+package datatypes
+
 enum class LightColor {
     RED,
     YELLOW,
