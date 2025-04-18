@@ -1,0 +1,3 @@
+interface Instruction(){
+    fun run()
+}
