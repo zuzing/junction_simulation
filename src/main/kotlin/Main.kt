@@ -1,8 +1,8 @@
-import main.loaders.ConfigLoader
+import loaders.ConfigLoader
 
 fun main(args: Array<String>) {
     val configFilePath = if (args.isNotEmpty()) args[0] else "config.json"
-    val config = ConfigLoader.loadConfig(configFilePath)
+    val config = ConfigLoader.loadConfigFromJson(configFilePath)
 
     val instructions: List<Instruction> = listOf()
 

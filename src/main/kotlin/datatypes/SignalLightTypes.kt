@@ -7,7 +7,7 @@ enum class LightColor {
 }
 
 enum class SignalType {
-    StandardLight,
-    FilterLight,
-    ArrowLight,
+    STANDARD_LIGHT,
+    FILTER_LIGHT,
+    ARROW_LIGHT,
 }

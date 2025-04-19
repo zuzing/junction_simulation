@@ -10,9 +10,6 @@ import datatypes.RelativeDirection
 import datatypes.SignalType
 import junction.Lane
 
-
-
-
 data class LaneConfig(
     val laneId: String,
     val entryDirection: CardinalDirection,
@@ -22,7 +19,6 @@ data class LaneConfig(
     fun toLane(): Lane {
         return Lane(
             id = laneId,
-            entryDirection = entryDirection,
             permittedDirections = permittedDirections,
             signalType = signalType
         )
@@ -30,13 +26,13 @@ data class LaneConfig(
 }
 
 data class SimulationConfig(
-    val numVehiclesPerGreen: Int,
+    val numVehiclesPerStep: Int,
     val yellowLightDuration: Int,
     val lanes: List<LaneConfig>
 )
 
 object ConfigLoader {
-    fun loadConfig(filePath: String): SimulationConfig {
+    fun loadConfigFromJson(filePath: String): SimulationConfig {
         val mapper = ObjectMapper().registerModule(KotlinModule())
         val file = File(filePath)
 

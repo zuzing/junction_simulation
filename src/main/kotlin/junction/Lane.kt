@@ -6,7 +6,6 @@ import datatypes.SignalType
 
 class Lane(
     val id: String,
-    val entryDirection: CardinalDirection,
     val permittedDirections: List<RelativeDirection>,
     val signalType: SignalType)
 {
