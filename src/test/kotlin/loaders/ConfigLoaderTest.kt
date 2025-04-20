@@ -1,10 +1,11 @@
+package loaders
+
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.io.TempDir
 import kotlin.test.Test
 import java.nio.file.Path
 import java.io.IOException
 
-import loaders.*
 import datatypes.*
 import junction.Lane
 
@@ -59,7 +60,7 @@ class ConfigLoaderTest {
         val configFile = tempDir.resolve("valid_config.json").toFile()
         configFile.writeText(validJson)
 
-        val config = ConfigLoader.loadConfigFromJson(configFile.absolutePath)
+        val config = ConfigLoader.loadFromJson(configFile.absolutePath)
 
         assertNotNull(config)
         assertEquals(5, config.numVehiclesPerStep)
@@ -79,10 +80,10 @@ class ConfigLoaderTest {
 
     @Test
     fun `loadConfigFromJson should throw IOException for non-existent file`() {
-        val nonExistentFilePath = tempDir.resolve("non_existent_config.json").toString()
+        val fakeFilePath = tempDir.resolve("missing.json").toString()
 
         assertThrows(IOException::class.java) {
-            ConfigLoader.loadConfigFromJson(nonExistentFilePath)
+            ConfigLoader.loadFromJson(fakeFilePath)
         }
     }
 
@@ -100,7 +101,7 @@ class ConfigLoaderTest {
         configFile.writeText(wrongStructureJson)
 
         assertThrows(IOException::class.java) {
-            ConfigLoader.loadConfigFromJson(configFile.absolutePath)
+            ConfigLoader.loadFromJson(configFile.absolutePath)
         }
     }
 
@@ -117,7 +118,7 @@ class ConfigLoaderTest {
             configFile.writeText(invalidJson)
 
             assertThrows(IOException::class.java) {
-                ConfigLoader.loadConfigFromJson(configFile.absolutePath)
+                ConfigLoader.loadFromJson(configFile.absolutePath)
             }
         }
 }

@@ -1,3 +1,7 @@
+package instructions
+
+import junction.Crossroad
+
 interface Instruction{
-    fun run()
+    fun runOn(crossroad: Crossroad)
 }

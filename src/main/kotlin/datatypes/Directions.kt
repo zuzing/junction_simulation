@@ -7,8 +7,7 @@ enum class CardinalDirection {
     WEST; // order is important here, impacts the RelativeDirection class
     companion object {
         fun fromString(direction: String): CardinalDirection {
-//            return values().find { it.name.equals(direction, ignoreCase = true) }
-            return enumValueOf<CardinalDirection>(direction.uppercase()) // not sure if this works
+            return enumValueOf<CardinalDirection>(direction.uppercase())
         }
     }
 }
@@ -27,9 +26,9 @@ enum class RelativeDirection {
             val diff = (endOrdinal - startOrdinal + numDirections) % numDirections
 
             return when (diff) {
-                0 -> FORWARD
+                0 -> BACKWARDS
                 1 -> RIGHT
-                2 -> BACKWARDS
+                2 -> FORWARD
                 3 -> LEFT
                 else -> throw IllegalArgumentException("Invalid direction change")
             }
