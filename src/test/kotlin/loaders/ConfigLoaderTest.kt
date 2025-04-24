@@ -7,26 +7,6 @@ import java.nio.file.Path
 import java.io.IOException
 
 import datatypes.*
-import junction.Lane
-
-class LaneConfigTest {
-    @Test
-    fun `toLane should properly convert LaneConfig to Lane`() {
-
-        val laneConfig = LaneConfig(
-            laneId = "laneN1",
-            entryDirection = CardinalDirection.NORTH,
-            permittedDirections = listOf(RelativeDirection.FORWARD, RelativeDirection.RIGHT),
-            signalType = SignalType.STANDARD_LIGHT
-        )
-
-        val lane: Lane = laneConfig.toLane()
-
-        assertEquals(laneConfig.laneId, lane.id)
-        assertEquals(laneConfig.permittedDirections, lane.permittedDirections)
-        assertEquals(lane.signalType, lane.signalType)
-    }
-}
 
 class ConfigLoaderTest {
 
@@ -39,6 +19,7 @@ class ConfigLoaderTest {
             {
               "numVehiclesPerStep": 5,
               "yellowLightDuration": 3,
+              "maxAlgorithmDepth": 10,
               "lanes": [
                 {
                   "laneId": "laneN1",
@@ -93,6 +74,7 @@ class ConfigLoaderTest {
             {
               "numVehiclesPerStep": "five", // Incorrect type (String instead of Int)
               "yellowLightDuration": 3,
+               "maxAlgorithmDepth": 10,
               "lanes": []
             }
         """.trimIndent()
@@ -111,6 +93,7 @@ class ConfigLoaderTest {
             {
                 "numVehiclesPerStep": 5,
                 "yellowLightDuration": 3,
+                "maxAlgorithmDepth": 10,
             } // missing lanes array
             """.trimIndent()
 

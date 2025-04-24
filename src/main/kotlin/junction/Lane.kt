@@ -1,8 +1,8 @@
 package junction
 
-import datatypes.CardinalDirection
 import datatypes.RelativeDirection
 import datatypes.SignalType
+import datatypes.Vehicle
 
 class Lane(
     val id: String,
@@ -11,6 +11,15 @@ class Lane(
 {
     private val vehicles: MutableList<Vehicle> = mutableListOf()
 
+    fun isNotEmpty(): Boolean{
+     return vehicles.isNotEmpty()
+
+    }
+
+    fun queueLength(): Int {
+        return vehicles.size
+    }
+
     fun addVehicle(vehicle: Vehicle) {
         vehicles.add(vehicle)
     }
@@ -18,6 +27,14 @@ class Lane(
     fun popVehicle(): Vehicle? {
         return if (vehicles.isNotEmpty()) {
             vehicles.removeAt(0)
+        } else {
+            null
+        }
+    }
+
+    fun getFirstVehicleDirection(): RelativeDirection? {
+        return if (vehicles.isNotEmpty()) {
+            vehicles[0].direction
         } else {
             null
         }

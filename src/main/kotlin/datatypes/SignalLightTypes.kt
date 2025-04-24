@@ -1,13 +1,7 @@
 package datatypes
 
-enum class LightColor {
-    RED,
-    YELLOW,
-    GREEN,
-}
-
 enum class SignalType {
-    STANDARD_LIGHT,
-    FILTER_LIGHT,
-    ARROW_LIGHT,
+    STANDARD_LIGHT, // On green: can always go STRAIGHT or RIGHT; can go LEFT or BACKWARDS if no oncoming traffic
+    FILTER_LIGHT, // Similar to standard light, but additionally allows RIGHT turns on red if no oncoming traffic
+    ARROW_LIGHT, // On green: can always go
 }

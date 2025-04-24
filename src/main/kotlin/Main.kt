@@ -1,13 +1,17 @@
 import instructions.Instruction
-import loaders.*
+import loaders.ConfigLoader
+import loaders.InstructionLoader
 
 fun main(args: Array<String>) {
-    val configFilePath = if (args.isNotEmpty()) args[0] else "config.json"
-    val config = ConfigLoader.loadFromJson(configFilePath)
-
-    val instructionsFilePath = if (args.size > 1) args[1] else "instructions.json"
+    val instructionsFilePath = if  (args.isNotEmpty()) args[0] else "instructions.json"
     val instructions: List<Instruction> = InstructionLoader.loadFromJson(instructionsFilePath)
 
-    val simulation = Simulation(config, instructions)
+    val loggerFilePath = if (args.size > 2) args[2] else "log.json"
+    val logger = Logger(loggerFilePath)
+
+    val configFilePath = if (args.size > 1) args[1] else "config.json"
+    val config = ConfigLoader.loadFromJson(configFilePath)
+
+    val simulation = Simulation(config, instructions, logger)
     simulation.run()
 }
