@@ -22,7 +22,7 @@ Ensure the following files are placed in `src/main/resources/`:
 ## Usage
 
 ### Run the simulation with default files
-
+Replace `./gradlew` with `gradlew` on windows
 ```bash
 ./gradlew run
 ```
