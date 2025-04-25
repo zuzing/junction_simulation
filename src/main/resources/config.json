@@ -1,0 +1,31 @@
+{
+    "numVehiclesPerStep": 1,
+    "yellowLightDuration": 0,
+    "maxAlgorithmDepth": 1,
+    "lanes": [
+      {
+        "laneId": "laneN1",
+        "entryDirection": "NORTH",
+        "permittedDirections": ["FORWARD", "RIGHT","LEFT"],
+        "signalType": "STANDARD_LIGHT"
+      },
+      {
+        "laneId": "laneE1",
+        "entryDirection": "EAST",
+        "permittedDirections": ["FORWARD", "RIGHT","LEFT"],
+        "signalType": "STANDARD_LIGHT"
+      },
+      {
+        "laneId": "laneS1",
+        "entryDirection": "SOUTH",
+        "permittedDirections": ["FORWARD", "RIGHT","LEFT"],
+        "signalType": "STANDARD_LIGHT"
+      },
+      {
+        "laneId": "laneW1",
+        "entryDirection": "WEST",
+        "permittedDirections": ["FORWARD", "RIGHT","LEFT"],
+        "signalType": "STANDARD_LIGHT"
+      }
+    ]
+  }

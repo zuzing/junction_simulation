@@ -1,5 +1,11 @@
 plugins {
     kotlin("jvm") version "1.9.0"
+    kotlin("plugin.serialization") version "1.9.0"
+    application
+}
+
+application {
+    mainClass.set("MainKt")
 }
 
 group = "org.example"

@@ -136,6 +136,5 @@ class Crossroad(
     fun getVehicles(): List<Vehicle> {
         return lanes.values.flatten()
             .flatMap { it.getVehicles() }
-            .filter { it.direction == RelativeDirection.LEFT }
     }
 }
