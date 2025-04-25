@@ -1,7 +1,6 @@
 package junction
 
-import datatypes.LaneConfig
-import datatypes.SignalPattern
+import datatypes.*
 
 class SignalController private constructor(
     private val allSignalPatternsCombinations: List<List<SignalPattern>>,
@@ -85,10 +84,6 @@ class SignalController private constructor(
 
 companion object {
     private fun generateUnconflictedLanesCombinations(lanesConfig: List<LaneConfig>): List<List<SignalPattern>> {
-        fun intersect(lane1: SignalPattern, lane2: SignalPattern): Boolean {
-            // if both
-            TODO("implement")
-        }
 //        should generate all maximal combinations of possible non intersecting Patterns
 //        signal pattern is not lane specific but direction specific (e.g. all North lanes that have possibility to go stright can go straight at the same time)
 //weak and strong patterns can coexist, shouldnt influence each other
@@ -100,15 +95,97 @@ companion object {
 
         // for each direction ["NORTH", "EAST", "SOUTH", "WEST"]
         // for each lane in lanesConfig in that direction
-        // if
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
+
+        val buildingBlocks = allLightsCombinations(lanesConfig)
+
+        val allCombinations = mutableListOf<List<SignalPattern>>()
+
+        allCombinations.addAll(listOf(buildingBlocks.slice(0..5)))
+        allCombinations.addAll(listOf(buildingBlocks.slice(6..11)))
+
+        return allCombinations
     }
 
     private fun allLightsCombinations(lanesConfig: List<LaneConfig>): List<SignalPattern> {
         // for each direction ["NORTH", "EAST", "SOUTH", "WEST"]
         // for each lane in lanesConfig in that direction
-        // if
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
+
+        val fN = SignalPattern(
+            type = Priority.STRONG,
+            startDirection = CardinalDirection.NORTH,
+            movementDirection = RelativeDirection.FORWARD
+        )
+        val rN = SignalPattern(
+            type = Priority.STRONG,
+            startDirection = CardinalDirection.NORTH,
+            movementDirection = RelativeDirection.RIGHT
+        )
+        val lN = SignalPattern(
+            type = Priority.WEAK,
+            startDirection = CardinalDirection.NORTH,
+            movementDirection = RelativeDirection.LEFT
+        )
+        val fS = SignalPattern(
+            type = Priority.STRONG,
+            startDirection = CardinalDirection.SOUTH,
+            movementDirection = RelativeDirection.FORWARD
+        )
+        val rS = SignalPattern(
+            type = Priority.STRONG,
+            startDirection = CardinalDirection.SOUTH,
+            movementDirection = RelativeDirection.RIGHT
+        )
+        val lS = SignalPattern(
+            type = Priority.WEAK,
+            startDirection = CardinalDirection.SOUTH,
+            movementDirection = RelativeDirection.LEFT
+        )
+        val fE = SignalPattern(
+            type = Priority.STRONG,
+            startDirection = CardinalDirection.EAST,
+            movementDirection = RelativeDirection.FORWARD
+        )
+        val rE = SignalPattern(
+            type = Priority.STRONG,
+            startDirection = CardinalDirection.EAST,
+            movementDirection = RelativeDirection.RIGHT
+        )
+        val lE = SignalPattern(
+            type = Priority.WEAK,
+            startDirection = CardinalDirection.EAST,
+            movementDirection = RelativeDirection.LEFT,
+        )
+        val fW = SignalPattern(
+            type = Priority.STRONG,
+            startDirection = CardinalDirection.WEST,
+            movementDirection = RelativeDirection.FORWARD,
+        )
+        val rW = SignalPattern(
+            type = Priority.STRONG,
+            startDirection = CardinalDirection.WEST,
+            movementDirection = RelativeDirection.RIGHT,
+        )
+        val lW = SignalPattern(
+            type = Priority.WEAK,
+            startDirection = CardinalDirection.WEST,
+            movementDirection = RelativeDirection.LEFT,
+        )
+
+//        lN.conflictedWith = listOf(lS, fS, rS)
+//        lS.conflictedWith = listOf(lN, fN, rN)
+//        lE.conflictedWith = listOf(lW, fW, rW)
+//        lW.conflictedWith = listOf(lE, fE, rE)
+
+
+        return listOf(
+            fN, rN, lN,
+            fS, rS, lS,
+            fE, rE, lE,
+            fW, rW, lW
+        )
+
     }
 }
 

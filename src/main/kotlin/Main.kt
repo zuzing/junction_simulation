@@ -6,10 +6,13 @@ fun main(args: Array<String>) {
     val instructionsFilePath = if  (args.isNotEmpty()) args[0] else "instructions.json"
     val instructions: List<Instruction> = InstructionLoader.loadFromJson(instructionsFilePath)
 
-    val loggerFilePath = if (args.size > 2) args[2] else "log.json"
+    val loggerFilePath = if (args.size > 1) args[1] else "log.json"
     val logger = Logger(loggerFilePath)
 
-    val configFilePath = if (args.size > 1) args[1] else "config.json"
+    val configFilePath = if (args.size > 2) {
+        println("Warning: currently only the default config.json is guaranteed to work")
+        args[2]
+    } else "config.json"
     val config = ConfigLoader.loadFromJson(configFilePath)
 
     val simulation = Simulation(config, instructions, logger)

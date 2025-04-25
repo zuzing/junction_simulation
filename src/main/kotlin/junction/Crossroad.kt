@@ -34,6 +34,34 @@ class Crossroad(
             ?.first { pattern.movementDirection in it.permittedDirections }
             ?: throw IllegalArgumentException("No lane for pattern $pattern")
 
+    /*
+    Currently only checks for weak left turns. TODO: make more general.
+     */
+    private fun findConflicts(signalPatterns: List<SignalPattern>): Map<SignalPattern, List<SignalPattern>> {
+        val conflictsResult = mutableMapOf<SignalPattern, MutableList<SignalPattern>>()
+
+        val weakLeftTurns = signalPatterns.filter {
+            it.type == Priority.WEAK && it.movementDirection == RelativeDirection.LEFT
+        }
+        if (weakLeftTurns.isEmpty()) {
+            return emptyMap()
+        }
+
+        for (weakLeftTurn in weakLeftTurns) {
+            val oppositeDirection = weakLeftTurn.startDirection.getOpposite()
+
+            val conflictingPatterns = signalPatterns.filter { otherPattern ->
+                otherPattern.startDirection == oppositeDirection
+            }
+            if (conflictingPatterns.isNotEmpty()) {
+                conflictsResult.computeIfAbsent(weakLeftTurn) { mutableListOf() }
+                    .addAll(conflictingPatterns)
+            }
+        }
+
+        return conflictsResult
+    }
+
     /**
      * Advance one tick:
      *  1. Let vehicles go on weak signals if there are no conflicts
@@ -41,6 +69,7 @@ class Crossroad(
      *  3. Finally, tick the lights forward
      */
     fun step() {
+        val conflictedWith = findConflicts(signalController.greenLights)
         val weakPatterns   = signalController.greenLights.filter  { it.type == Priority.WEAK   }
         val strongPatterns = signalController.greenLights.filter  { it.type == Priority.STRONG }
 
@@ -51,17 +80,17 @@ class Crossroad(
             if (pattern in servedWeakGroups) continue@outer
 
             // gather its conflicting patterns (only WEAK vs. WEAK)
-            val conflicts = (pattern.conflictedWith ?: emptyList())
+            val conflicts = (conflictedWith[pattern] ?: emptyList())
                 .filter { it.type == Priority.WEAK }
 
             // --- STRONG conflict check ---
             // if any of its conflicts is STRONG‐green with a waiting vehicle going the same way, skip
-            val anyStrongBlocking = (pattern.conflictedWith ?: emptyList())
+            val anyStrongBlocking = (conflictedWith[pattern] ?: emptyList())
                 .filter { it.type == Priority.STRONG }
                 .any { conflict ->
                     val lane = laneForPattern(conflict)
                     lane.isNotEmpty() &&
-                            lane.getFirstVehicleDirection() == pattern.movementDirection
+                            lane.getFirstVehicleDirection() == conflict.movementDirection
                 }
             if (anyStrongBlocking) continue@outer
 
@@ -79,12 +108,12 @@ class Crossroad(
             laneForPattern(pattern).popVehicle()
         }
 
-        // 3) Process STRONG patterns (no conflicts amongst themselves)
+        // 2) Process STRONG patterns (no conflicts amongst themselves)
         for (pattern in strongPatterns) {
             laneForPattern(pattern).popVehicle()
         }
 
-        // 4) Advance the lights
+        // 3) Advance the lights
         signalController.step()
     }
 

@@ -1,10 +1,9 @@
 package junction
 
-import org.junit.jupiter.api.Assertions.*
-import kotlin.test.Test
-
 import datatypes.*
 import instructions.AddVehicleInstruction
+import org.junit.jupiter.api.Assertions.*
+import kotlin.test.Test
 
 class CrossroadTest {
     private val dummySignalController = SignalController(emptyList(), 1)
@@ -30,7 +29,7 @@ class CrossroadTest {
         assertTrue(lane.isNotEmpty(), "Lane should have received the vehicle")
         val popped = lane.popVehicle()
         assertNotNull(popped)
-        assertEquals("V1", popped!!.id)
+        assertEquals("vehicle1", popped!!.id)
     }
 
     @Test
@@ -40,7 +39,7 @@ class CrossroadTest {
             signalController = dummySignalController
         )
         val vehicle = Vehicle(
-            id = "V2",
+            id = "vehicle1",
             direction = RelativeDirection.LEFT
         )
         assertThrows(IllegalArgumentException::class.java) {
@@ -85,7 +84,7 @@ class CrossroadTest {
     }
 
     @Test
-    fun `step processes vehicles correctly`() {
+    fun `step processes vehicles on green lights correctly`() {
         val laneN = Lane(
             id = "laneN1",
             permittedDirections = listOf(RelativeDirection.FORWARD),
@@ -109,35 +108,53 @@ class CrossroadTest {
 
         crossroad.signalController.greenLights = listOf(
             SignalPattern(
-                startDirection = CardinalDirection.NORTH,
-                movementDirection = RelativeDirection.FORWARD,
                 type = Priority.STRONG,
-                conflictedWith = null
+                startDirection = CardinalDirection.NORTH,
+                movementDirection = RelativeDirection.FORWARD
             ),
             SignalPattern(
-                startDirection = CardinalDirection.EAST,
-                movementDirection = RelativeDirection.RIGHT,
                 type = Priority.STRONG,
-                conflictedWith = null
+                startDirection = CardinalDirection.EAST,
+                movementDirection = RelativeDirection.RIGHT
             )
         )
 
         crossroad.step()
 
         assertEquals(0, laneN.queueLength())
-        assertEquals(1, laneE.queueLength())
+        assertEquals(0, laneE.queueLength())
+    }
+
+    @Test
+    fun `step processes only vehicles on green lights`() {
+        val laneN = Lane(
+            id = "laneN1",
+            permittedDirections = listOf(RelativeDirection.FORWARD),
+            signalType = SignalType.STANDARD_LIGHT
+        )
+        val laneE = Lane(
+            id = "laneE1",
+            permittedDirections = listOf(RelativeDirection.RIGHT, RelativeDirection.FORWARD),
+            signalType = SignalType.STANDARD_LIGHT
+        )
+        val crossroad = Crossroad(
+            lanes = mapOf(
+                CardinalDirection.NORTH to listOf(laneN),
+                CardinalDirection.EAST to listOf(laneE)
+            ),
+            signalController = dummySignalController
+        )
+
+        laneN.addVehicle(Vehicle("vehicle1", RelativeDirection.FORWARD))
+        laneE.addVehicle(Vehicle("vehicle2", RelativeDirection.FORWARD))
 
         crossroad.signalController.greenLights = listOf(
             SignalPattern(
-                startDirection = CardinalDirection.NORTH,
-                movementDirection = RelativeDirection.FORWARD,
                 type = Priority.STRONG,
-                conflictedWith = null
-            ),
+                startDirection = CardinalDirection.NORTH,
+                movementDirection = RelativeDirection.FORWARD
+            )
         )
-
-        laneN.addVehicle(Vehicle("vehicle3", RelativeDirection.FORWARD))
-        laneE.addVehicle(Vehicle("vehicle4", RelativeDirection.FORWARD))
 
         crossroad.step()
 
@@ -146,7 +163,50 @@ class CrossroadTest {
     }
 
     @Test
-    fun `step resolves conflicts correctly`() {
+    fun `step resolves weak-strong conflicts correctly`() {
+        val laneN = Lane(
+            id = "laneN1",
+            permittedDirections = listOf(RelativeDirection.FORWARD, RelativeDirection.LEFT),
+            signalType = SignalType.STANDARD_LIGHT
+        )
+        val laneS = Lane(
+            id = "laneS1",
+            permittedDirections = listOf(RelativeDirection.FORWARD, RelativeDirection.LEFT),
+            signalType = SignalType.STANDARD_LIGHT
+        )
+        val crossroad = Crossroad(
+            lanes = mapOf(
+                CardinalDirection.NORTH to listOf(laneN),
+                CardinalDirection.SOUTH to listOf(laneS)
+            ),
+            signalController = dummySignalController
+        )
+
+        laneN.addVehicle(Vehicle("vehicle1", RelativeDirection.FORWARD))
+        laneS.addVehicle(Vehicle("vehicle2", RelativeDirection.LEFT))
+
+
+        val northForward = SignalPattern(
+            type             = Priority.STRONG,
+            startDirection   = CardinalDirection.NORTH,
+            movementDirection= RelativeDirection.FORWARD
+        )
+        val southLeft = SignalPattern(
+            type             = Priority.WEAK,
+            startDirection   = CardinalDirection.SOUTH,
+            movementDirection= RelativeDirection.LEFT
+        )
+
+        crossroad.signalController.greenLights = listOf(northForward, southLeft)
+
+        crossroad.step()
+
+        assertEquals(0, laneN.queueLength())
+        assertEquals(1, laneS.queueLength())
+    }
+
+    @Test
+    fun `step resolves weak-weak conflicts correctly`() {
         val laneN = Lane(
             id = "laneN1",
             permittedDirections = listOf(RelativeDirection.FORWARD, RelativeDirection.LEFT),
@@ -172,18 +232,13 @@ class CrossroadTest {
         val northLeft = SignalPattern(
             type             = Priority.WEAK,
             startDirection   = CardinalDirection.NORTH,
-            movementDirection= RelativeDirection.LEFT,
-            conflictedWith   = null
+            movementDirection= RelativeDirection.LEFT
         )
         val southLeft = SignalPattern(
             type             = Priority.WEAK,
             startDirection   = CardinalDirection.SOUTH,
-            movementDirection= RelativeDirection.LEFT,
-            conflictedWith   = null
+            movementDirection= RelativeDirection.LEFT
         )
-
-        northLeft.conflictedWith = listOf(southLeft)
-        southLeft.conflictedWith = listOf(northLeft)
 
         crossroad.signalController.greenLights = listOf(northLeft, southLeft)
 

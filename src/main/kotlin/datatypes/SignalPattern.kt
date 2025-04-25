@@ -6,6 +6,7 @@ enum class Priority {
 }
 
 
-data class SignalPattern(val type: Priority, val startDirection: CardinalDirection,
-                         val movementDirection: RelativeDirection,
-                         var conflictedWith: List<SignalPattern>?)
+data class SignalPattern(
+    val type: Priority, val startDirection: CardinalDirection,
+    val movementDirection: RelativeDirection
+)

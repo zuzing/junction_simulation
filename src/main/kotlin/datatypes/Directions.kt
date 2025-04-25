@@ -5,6 +5,12 @@ enum class CardinalDirection {
     EAST,
     SOUTH,
     WEST; // order is important here, impacts the RelativeDirection class
+
+    fun getOpposite(): CardinalDirection {
+        val numDirections = entries.size
+        val oppositeOrdinal = (this.ordinal + 2) % numDirections
+        return entries[oppositeOrdinal]
+    }
     companion object {
         fun fromString(direction: String): CardinalDirection {
             return enumValueOf<CardinalDirection>(direction.uppercase())
