@@ -54,7 +54,18 @@ These files must still be located in `src/main/resources/`.
 - **@junction configuration** – Structure and logic of the intersection *(work in progress)*.
 
 ### Simulating flow of vehicles on crossroad
-Each pair of **direction** (`NORTH`, `EAST`, `SOUTH`, `WEST`) and **movement** (`LEFT`, `FORWARD`, `RIGHT`, `BACKWARDS` *(to be added)*)—represented by one or more lanes—is assigned a **STRONG** or **WEAK** priority.
+Each pair of **direction** (`NORTH`, `EAST`, `SOUTH`, `WEST`) and **movement** (`LEFT`, `FORWARD`, `RIGHT`, `BACKWARDS`-*(to be added)*)—represented by one or more lanes—is assigned a **STRONG** or **WEAK** priority.
+
+For example, if there are two lanes coming from the **NORTH**:
+- One lane allows `FORWARD` and `RIGHT` movement,
+- The other allows `LEFT` and `FORWARD`,
+
+Then the system creates three movement pairs:
+- `NORTH, FORWARD`
+- `NORTH, LEFT`
+- `NORTH, RIGHT`
+
+This abstraction allows easier grouping of lanes from the same direction and simplifies changing corresponding traffic lights together.
 
 - **Vehicles on STRONG lanes** always proceed.
 - **Vehicles on WEAK lanes** may proceed *only if* doing so does not conflict with any STRONG lane traffic.
