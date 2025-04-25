@@ -2,9 +2,6 @@
     "stepStatuses": [
         {
             "leftVehicles": [
-                "vehicle1",
-                "vehicle2",
-                "vehicle3",
                 "vehicle4",
                 "vehicle5",
                 "vehicle6"
@@ -12,18 +9,20 @@
         },
         {
             "leftVehicles": [
-                "vehicle2",
                 "vehicle4",
+                "vehicle5",
                 "vehicle6",
+                "vehicle7",
                 "vehicle8",
                 "vehicle9"
             ]
         },
         {
             "leftVehicles": [
-                "vehicle2",
                 "vehicle4",
+                "vehicle5",
                 "vehicle6",
+                "vehicle7",
                 "vehicle8",
                 "vehicle9"
             ]

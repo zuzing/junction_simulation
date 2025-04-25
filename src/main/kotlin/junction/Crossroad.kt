@@ -1,7 +1,7 @@
 package junction
 
 import datatypes.*
-class Crossroad(
+data class Crossroad(
     public val lanes: Map<CardinalDirection, List<Lane>>,
     public val signalController: SignalController,
     private val numVehiclesPerStep: Int = 1
@@ -26,7 +26,7 @@ class Crossroad(
         },
         SignalController(other.signalController),
         other.numVehiclesPerStep
-    )
+    ) /* TODO: copy not deep enough */
 
     /*
     TODO: make it lanesForPattern returning a list of lanes
@@ -140,7 +140,5 @@ class Crossroad(
     fun getVehicles(): List<Vehicle> {
         return lanes.values.flatten()
             .flatMap { it.getVehicles() }
-            .distinct()
-        // TODO: why are there duplicates? Constructor copies not deep?
     }
 }

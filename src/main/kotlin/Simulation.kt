@@ -26,12 +26,12 @@ class Simulation(private val configuration: SimulationConfig, private val instru
                         throw IllegalArgumentException("No valid signal pattern found")
                     }
 
-                    instr.runOn(crossroad)
+//                    instr.runOn(crossroad) uncomment when crossroad copy constructor is fixed
 
                     logger.logVehiclesLeft(crossroad)
                 }
                 else -> {
-                    instr.runOn(crossroad)
+//                    instr.runOn(crossroad) uncomment when crossroad copy constructor is fixed
                 }
             }
         }
