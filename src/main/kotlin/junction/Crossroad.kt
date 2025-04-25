@@ -140,5 +140,7 @@ class Crossroad(
     fun getVehicles(): List<Vehicle> {
         return lanes.values.flatten()
             .flatMap { it.getVehicles() }
+            .distinct()
+        // TODO: why are there duplicates? Constructor copies not deep?
     }
 }

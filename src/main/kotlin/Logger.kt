@@ -17,7 +17,7 @@ class Logger(private val pathFile: String) {
 
     fun logVehiclesLeft(crossroad: Crossroad) {
         val left = crossroad.getVehicles()
-            .map { it.id }
+            .map { it.id }.sorted()
 
         stepStatuses.add(StepStatus(leftVehicles = left))
     }

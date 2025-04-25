@@ -3,35 +3,29 @@
         {
             "leftVehicles": [
                 "vehicle1",
-                "vehicle5",
                 "vehicle2",
-                "vehicle6",
                 "vehicle3",
-                "vehicle4"
+                "vehicle4",
+                "vehicle5",
+                "vehicle6"
             ]
         },
         {
             "leftVehicles": [
                 "vehicle2",
-                "vehicle6",
-                "vehicle6",
-                "vehicle9",
                 "vehicle4",
-                "vehicle4",
-                "vehicle8"
-            ]
-        },
-        {
-            "leftVehicles": [
-                "vehicle2",
                 "vehicle6",
-                "vehicle6",
-                "vehicle9",
-                "vehicle9",
-                "vehicle4",
-                "vehicle4",
                 "vehicle8",
-                "vehicle8"
+                "vehicle9"
+            ]
+        },
+        {
+            "leftVehicles": [
+                "vehicle2",
+                "vehicle4",
+                "vehicle6",
+                "vehicle8",
+                "vehicle9"
             ]
         }
     ]
