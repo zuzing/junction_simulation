@@ -1,7 +1,6 @@
 package junction
 
 import datatypes.*
-
 class Crossroad(
     public val lanes: Map<CardinalDirection, List<Lane>>,
     public val signalController: SignalController,
@@ -29,6 +28,9 @@ class Crossroad(
         other.numVehiclesPerStep
     )
 
+    /*
+    TODO: make it lanesForPattern returning a list of lanes
+     */
     private fun laneForPattern(pattern: SignalPattern): Lane =
         lanes[pattern.startDirection]
             ?.first { pattern.movementDirection in it.permittedDirections }
@@ -69,6 +71,8 @@ class Crossroad(
      *  3. Finally, tick the lights forward
      */
     fun step() {
+        /* TODO: consider if there are multiple lanes in the same direction in conflict
+         */
         val conflictedWith = findConflicts(signalController.greenLights)
         val weakPatterns   = signalController.greenLights.filter  { it.type == Priority.WEAK   }
         val strongPatterns = signalController.greenLights.filter  { it.type == Priority.STRONG }
